@@ -1,0 +1,7 @@
+# Ignore PDF files
+*.pdf
+
+# Ignore Firebase related files
+firebase.json
+.firebaserc
+.firebase/
