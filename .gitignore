@@ -5,3 +5,6 @@
 firebase.json
 .firebaserc
 .firebase/
+
+# Ignore Firebase functions related files
+functions/node_modules/
