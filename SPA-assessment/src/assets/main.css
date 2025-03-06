@@ -5,6 +5,7 @@
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  padding-top: 4rem; /* Add extra padding at top for the navbar */
 }
 
 a,
@@ -23,13 +24,14 @@ a,
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
+    /* Remove the display: flex and place-items: center */
+    min-height: 100vh;
   }
 
   #app {
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
+    padding-top: 4rem; /* Keep space for navbar */
   }
 }
