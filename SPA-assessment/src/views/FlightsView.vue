@@ -41,6 +41,7 @@
                 <input type="datetime-local" id="landing" name="landing"><br><br>
                 <button type="submit" @click.prevent="submitFlight">Submit</button>
                 <button type="update" @click.prevent="updateFlight">Update</button>
+                <button type="delete" @click.prevent="deleteFlight">Delete</button>
             </form>
 
         </div>
@@ -77,6 +78,11 @@ export default {
         this.fetchFlights();
     },
     methods: {
+
+        async deleteFlight(){
+            await deleteDoc(doc(db, 'flights', this.selectedFlight.id));
+            await this.fetchFlights();
+        },
         calculateDuration(takeOff, landing) {
             var takeOff = new Date(takeOff);
             var landing = new Date(landing);
@@ -112,48 +118,42 @@ export default {
             }
 
 
-            let exists_bool = await this.checkExists(flightID);
+            // let exists_bool = await this.checkExists();
 
-            //Check if the flight ID already exists (our primary key)
-            if (exists_bool == true) {
-                alert('Flight ID already exists.');
-                return false;
-            }
+            // //Check if the document ID already exists (our primary key)
+            // if (exists_bool == true) {
+            //     alert('Flight ID already exists.');
+            //     return false;
+            // }
 
-            let flightDocRef = doc(db, 'flights', flightID);
-
-            await setDoc(flightDocRef, {
+            let flightDocRef = await addDoc(collection(db,'flights'), {
                 tailNumber: tailNumber,
                 flightID: flightID,
                 takeOff: takeOff,
                 landing: landing,
                 duration: duration
-            })
-            
+            });
 
             alert('Flight submitted successfully.');
 
             //Reactive update to array. This will update the view.
-            this.fetchFlights();
+            await this.fetchFlights();
         },
 
 
-        async checkExists(flightID) {
-            const flightDocRef = doc(db, 'flights', flightID);
-            try {
-                const docSnap = await getDoc(flightDocRef); 
+        async checkExists() {
+            let docRef = doc(db, 'flights', this.selectedFlight.id);
 
-                // Check if the document exists
-                if (docSnap.exists()) {
-                    console.log('Flight ID exists:', docSnap.data());
-                    return true; // Document exists
+            try {
+                const doc = await getDoc(docRef);
+                if (doc.exists()) {
+                    return true;
                 } else {
-                    console.log('Flight ID does not exist');
-                    return false; // Document does not exist
+                    return false;
                 }
-            } catch (error) {
-                console.error('Error checking flight ID by docRefID:', error);
-                return false; // Handle error
+            }
+            catch (error) {
+                console.error('Error checking if document exists:', error);
             }
         },
 
@@ -176,18 +176,12 @@ export default {
                 return false;
             }
 
-            //Check if the flight ID already exists (our primary key)
-            if (!await this.checkExists(flightID)) {
-                alert('Flight ID does not exist.');
-                return false;
-            }
-
             //Update the flight in the database
             var duration = this.calculateDuration(takeOff, landing);
             
             try {
                 //flightID is a string
-                const flightDocRef = doc(db, 'flights', flightID);
+                const flightDocRef = doc(db, 'flights', this.selectedFlight.id);
 
                 console.log("flightDocRef: ", flightDocRef);
                 await updateDoc(flightDocRef, {
@@ -205,9 +199,11 @@ export default {
             }
 
             //Reactive update to array. This will update the view.
-            this.fetchFlights();
+            await this.fetchFlights();
         },
+        
 
+        //format the date time into the readable format in the table
         formatDateTime(dateString) {
             if (!dateString) return ""; // Handle empty values
 
@@ -223,6 +219,23 @@ export default {
 
             return `${formattedTime} - ${formattedDate}`;
         },
+        
+
+        //Reformat the date string into format in input field 'Takeoff' & 'Landing'.
+        reformatDate(inputString) {
+            // Parse the input string into a Date object
+            const date = new Date(inputString);
+
+            // Get the year, month, day, hours, and minutes
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based, so add 1
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            // Return the formatted string
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        },
 
         async fetchFlights(){
 
@@ -232,7 +245,10 @@ export default {
             try{
                 const querySnapshot = await getDocs(flightDocRef);
                 querySnapshot.forEach(doc => {
-                    this.flights.push(doc.data());
+                    this.flights.push({
+                        id: doc.id,        // Document ID
+                        ...doc.data()      // Document data (spread operator to include all fields)
+                    });
                 });
             } catch (error){
                 console.error("Error getting flights:", error);
@@ -241,8 +257,15 @@ export default {
             console.log("flights: ", this.flights);
 
         },
+
         handleRowClick(flight) {
             this.selectedFlight = flight;
+
+            document.getElementById('tailNumber').value = flight.tailNumber;
+            document.getElementById('flightID').value = flight.flightID;
+            document.getElementById('takeOff').value = this.reformatDate(flight.takeOff);
+            document.getElementById('landing').value = this.reformatDate(flight.landing);
+
         }
     },
 
