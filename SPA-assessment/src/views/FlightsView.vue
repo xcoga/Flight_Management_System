@@ -32,6 +32,10 @@
         <div class="user-container">
             <div label="user-input">
                 <form>
+                    <p> **Note:</p>
+                    <p> 1) Duration is automatically calculated based on takeOff and Landing times.</p>
+                    <p>2) To update, click on the flight in the table. Update your values, then click update.</p>             
+                    <p>3) To delete, click on the flight in the table. Click Delete.</p>
                     <label for="tailNumber">Tail Number:</label>
                     <input type="text" id="tailNumber" name="tailNumber"><br>
                     <label for="flightID">Flight ID:</label>
@@ -47,6 +51,7 @@
                     </div>
                 </form>
                 <form>
+                    <p>Click on Reset View to reset the table.</p>
                     <label for="search">Search By ID:</label>
                     <input type="number" id="searchID"><br>    
                     <div class="button-group">
@@ -69,7 +74,7 @@ export default {
         return {
             flights: [], // Array of retrieved flights from firebase
             currentPage: 1, //Page number of the table in <div class ="user-input">
-            pageSize: 8, //Total number of flights displayed per page of the table in <div class ="user-input">
+            pageSize: 5, //Total number of flights displayed per page of the table in <div class ="user-input">
             selectedFlight: null, //The flight selected in the table.
         };
     },
@@ -485,8 +490,7 @@ div[label="user-input"] button[type="delete"]:hover {
 
 .table-container {
     width: 100%;
-    max-height: 800px; 
-    min-height: 50vh;
+    min-height: 30vh;
     overflow-y: auto; /* Enable vertical scrolling */
 }
 
