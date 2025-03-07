@@ -1,58 +1,78 @@
-**Website:** https://flight-management-3f213.web.app
+# Flight Management System
 
-**Login page:**
-Fill in any username + password present within the system.
+## Website
 
-**Flights page:**
+[Flight Management System](https://flight-management-3f213.web.app)
 
-\*\*Note: Duration of flight is automatically calculated by takeoff and landing times. There will be no field to input duration.
+## Features
 
-\***\*Logout**
+### Login Page
 
-1. Click Logout button on top right
+- Enter any username and password registered in the system.
 
-**Add flight**
+---
 
-1. Enter the fields in here
-   ![alt text](image.png)
-2. Click Submit
+### Flights Page
 
-**Update flight**
+- **Note:** Flight duration is automatically calculated based on takeoff and landing times. There is no manual input for duration.
 
-1. Click some table row on the table
-   ![alt text](image-1.png)
-2. Update the field details
-3. Click Update
+#### Logout
 
-**Delete flight**
+1. Click the **Logout** button in the top-right corner.
 
-1. Click some table row on the table
-   ![alt text](image-2.png)
-2. Click Delete
+#### Add Flight
 
-**Search flight:**
+1. Enter the required details in the form below.
+   ![Add Flight](image.png)
+2. Click **Submit**.
 
-1. Enter some flightID into the field
-   ![alt text](image-3.png)
-2. Click Search
-3. To navigate back to display all flights, Click Reset View
-   ![alt text](image-5.png)
+#### Update Flight
 
-**Add user**
+1. Select a flight row from the table.
+   ![Update Flight](image-1.png)
+2. Modify the necessary details.
+3. Click **Update**.
 
-1. Enter the fields in here
-   ![alt text](image-6.png)
-2. Click submit
+#### Delete Flight
 
-**Update User**
+1. Select a flight row from the table.
+   ![Delete Flight](image-2.png)
+2. Click **Delete**.
 
-1. Click on some user in the table
-   ![alt text](image-7.png)
-2. Update the fields
-3. Click Update
+#### Search Flight
 
-**Delete User**
+1. Enter a **Flight ID** into the search field.
+   ![Search Flight](image-3.png)
+2. Click **Search**.
+3. To reset the view and display all flights, click **Reset View**.
+   ![Reset View](image-5.png)
 
-1. Click on some user in the table
-   ![alt text](image-8.png)
-2. Click delete
+---
+
+### User Management
+
+#### Add User
+
+1. Enter the required details in the form below.
+   ![Add User](image-6.png)
+2. Click **Submit**.
+
+#### Update User
+
+1. Select a user from the table.
+   ![Update User](image-7.png)
+2. Modify the necessary details.
+3. Click **Update**.
+
+#### Delete User
+
+1. Select a user from the table.
+   ![Delete User](image-8.png)
+2. Click **Delete**.
+
+---
+
+## Notes
+
+- The system automates flight duration calculations.
+- Ensure correct details are entered before submitting changes.
