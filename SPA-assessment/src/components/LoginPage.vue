@@ -1,27 +1,83 @@
 <template>
-    <div>
-        <h2>Login</h2>
-        <form @submit.prevent="handleLogin">
-            <div>
-            <label>Email</label>
-            <input
-                v-model="username"
-                type="text"
-                required
-            />
-            </div>
-            <div>
-            <label>Password</label>
-            <input
-                v-model="password"
-                type="password"
-                required
-            />
-            </div>
-            <button type="submit">Login</button>
-        </form>
+  <div class="login-container">
+    <div class="login-box">
+      <h2>Login</h2>
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label>Email</label>
+          <input v-model="username" type="text" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input v-model="password" type="password" required />
+        </div>
+        <button type="submit">Login</button>
+      </form>
     </div>
-  </template>
+  </div>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Itim&display=swap');
+/* Ensure full-screen background */
+
+.login-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  height: 100vh;           /* Full viewport height */
+  width: 100vw;            /* Full viewport width */
+  background-image: url("../assets/airplane_bg_2.jpeg");  /* Reference the imported image */
+  background-size: cover;
+  background-repeat: no-repeat;  /* Avoid repeating the background */
+  background-position: center;  /* Center the background image */
+}
+
+.login-box {
+  background: rgba(0, 0, 0, 0.4); /* Slight transparency background: rgba(255, 255, 255, 0.8);*/ 
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 20vw;
+  height: 30vh;
+  text-align: center;
+  font-family: 'DynaPuff','Courier New', Courier, monospace; 
+  color: white;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input {
+  width: 100%;
+  padding-top:10px;
+  padding-bottom:10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  font-family: 'DynaPuff','Courier New', Courier, monospace; 
+  color: white;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+</style>
+
+
   
   <script setup>
   import { ref } from 'vue';
