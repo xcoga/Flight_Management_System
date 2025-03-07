@@ -23,4 +23,12 @@ const router = createRouter({
   ],
 })
 
+//Navigation guard. Firebase forces a '?' operator for FlightsView fetchFlights which causes an error.
+router.beforeEach((to, from, next) => {
+  // If '?' is detected, abort the navigation.
+  if (to.fullPath.includes('?') && from.name === to.name) {
+    return next(false); 
+  }
+  next();
+});
 export default router

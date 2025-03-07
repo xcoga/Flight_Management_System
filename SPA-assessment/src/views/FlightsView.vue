@@ -48,11 +48,11 @@
                 </form>
                 <form>
                     <label for="search">Search By ID:</label>
-                    <input type="number" id="searchID"><br>
+                    <input type="number" id="searchID"><br>    
                     <div class="button-group">
                         <button type="submit" @click.prevent="searchFlight">Search</button>
-                        <button class ="reset-button" @click="fetchFlights">Reset View</button>
-                    </div>                    
+                        <button type="submit" class="reset-button" @click.prevent="fetchFlights">Reset View</button>
+                    </div>                
                 </form>
             </div>
         </div>
@@ -368,10 +368,8 @@ export default {
                 }
                 console.log("flights: ", this.flights);
             }
-
-
-
         },
+
         /*
         function handleRowClick()
         returns: None
