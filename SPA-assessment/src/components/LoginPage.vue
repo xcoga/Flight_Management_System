@@ -1,34 +1,25 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
-      <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-center text-gray-700">Login</h2>
-        <form @submit.prevent="handleLogin" class="mt-6">
-          <div class="mb-4">
-            <label class="block text-gray-700">Email</label>
+    <div>
+        <h2>Login</h2>
+        <form @submit.prevent="handleLogin">
+            <div>
+            <label>Email</label>
             <input
-              v-model="username"
-              type="text"
-              required
-              class="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                v-model="username"
+                type="text"
+                required
             />
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Password</label>
+            </div>
+            <div>
+            <label>Password</label>
             <input
-              v-model="password"
-              type="password"
-              required
-              class="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                v-model="password"
+                type="password"
+                required
             />
-          </div>
-          <button
-            type="submit"
-            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-          >
-            Login
-          </button>
+            </div>
+            <button type="submit">Login</button>
         </form>
-      </div>
     </div>
   </template>
   

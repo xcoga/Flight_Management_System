@@ -27,7 +27,8 @@
                 <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
                 <span>Page {{ currentPage }} of {{ totalPages }}</span>
                 <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
-            </div>
+            </div><br>
+            <div><button @click="fetchFlights">Reset View</button></div>
         </div>
         <div label="user-input">
             <form>
@@ -42,6 +43,11 @@
                 <button type="submit" @click.prevent="submitFlight">Submit</button>
                 <button type="update" @click.prevent="updateFlight">Update</button>
                 <button type="delete" @click.prevent="deleteFlight">Delete</button>
+            </form>
+            <form>
+                <label for="search">Search By ID:</label>
+                <input type="number" id="searchID"><br><br>
+                <button type="submit" @click.prevent="searchFlight">Search</button>
             </form>
 
         </div>
@@ -78,6 +84,24 @@ export default {
         this.fetchFlights();
     },
     methods: {
+        async searchFlight(){
+            const flightID = document.getElementById('searchID').value;
+            const q = query(collection(db, "flights"), where("flightID", "==", flightID));
+            
+            try{
+                const querySnapshot = await getDocs(q);
+                this.flights = [];
+                querySnapshot.forEach((doc) => {
+                    this.flights.push({
+                            id: doc.id,        // Document ID
+                            ...doc.data()      // Document data (spread operator to include all fields)
+                    });
+                });
+            } catch(error){
+                console.log("search flight error: ", error);
+            }
+
+        },
 
         async deleteFlight(){
             await deleteDoc(doc(db, 'flights', this.selectedFlight.id));
@@ -118,13 +142,6 @@ export default {
             }
 
 
-            // let exists_bool = await this.checkExists();
-
-            // //Check if the document ID already exists (our primary key)
-            // if (exists_bool == true) {
-            //     alert('Flight ID already exists.');
-            //     return false;
-            // }
 
             let flightDocRef = await addDoc(collection(db,'flights'), {
                 tailNumber: tailNumber,
