@@ -18,7 +18,7 @@
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Itim&display=swap');
+
 /* Ensure full-screen background */
 
 .login-container {
@@ -41,7 +41,6 @@
   width: 20vw;
   height: 30vh;
   text-align: center;
-  font-family: 'DynaPuff','Courier New', Courier, monospace; 
   color: white;
 }
 
@@ -108,6 +107,7 @@ button:hover {
         
         // Store in localStorage
         localStorage.setItem('user', JSON.stringify(userData.username));
+        localStorage.setItem('isAdmin', JSON.stringify(userData.isAdmin));
         
         // Emit event to parent component. The event name is 'login-success' and the data is userData.username
         emit('login-success', userData.username);

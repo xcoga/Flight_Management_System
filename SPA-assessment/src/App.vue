@@ -3,6 +3,8 @@
   <LoginPage v-if="!isAuthenticated" @login-success="handleLoginSuccess" />
 
   <div v-if="isAuthenticated" class="authenticated-container">
+
+
     <header class="app-header">
       <nav>
         <RouterLink to="/flights">Flights</RouterLink>
@@ -68,13 +70,20 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
+.authenticated-container {
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
+  height: 100%; /* Ensure the container takes the full height */
+}
+
+
 .app-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
+  position: fixed;
+  top: 0;
+  left: 0 ;
   width: 100%;
-  z-index: 1000 !important;
-  background-color: var(--color-background);
+  z-index: 1000;
+  color: #d3571e;
 }
 
 nav {
@@ -82,13 +91,15 @@ nav {
   font-size: 2.0rem !important;
   padding: 1rem !important;
   gap: 15px;
-  justify-content: center!important;
-  align-items: center!important;
+  justify-content: center !important;
+  align-items: center !important;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: rgb(124, 36, 224);  /* Set background to black */
+  color: white;             /* Default text color */
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: white;  /* Active link will be white */
 }
 
 nav a.router-link-exact-active:hover {
@@ -99,6 +110,14 @@ nav a {
   display: inline-block;
   padding: 0 1rem;
   border-left: 1px solid var(--color-border);
+  color: rgba(255, 255, 255, 0.7); /* Non-active links are slightly less white */
+  text-decoration: none;  /* Remove underline */
+  transition: color 0.3s ease;  /* Smooth color transition */
+}
+
+nav a:hover {
+  color: #ff7f50;  /* Change color on hover (light orange, or choose another color) */
+  background-color: rgba(255, 127, 80, 0.2); /* Light orange background on hover */
 }
 
 nav a:first-of-type {
@@ -114,21 +133,4 @@ nav a:first-of-type {
   padding-top: 70px; /* Adjust based on your nav height */
 }
 
-@media (min-width: 1024px) {
-  .app-header {
-    background-color: var(--color-background);
-  }
-  
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-  
-  .main-content {
-    padding-top: 80px; /* Adjust for larger screens */
-  }
-}
 </style>

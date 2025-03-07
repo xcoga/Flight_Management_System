@@ -28,29 +28,35 @@
                 <span>Page {{ currentPage }} of {{ totalPages }}</span>
                 <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
             </div><br>
-            <div><button @click="fetchFlights">Reset View</button></div>
         </div>
-        <div label="user-input">
-            <form>
-                <label for="tailNumber">Tail Number:</label>
-                <input type="text" id="tailNumber" name="tailNumber"><br><br>
-                <label for="flightID">Flight ID:</label>
-                <input type="number" id="flightID" name="flightID"><br><br>
-                <label for="takeOff">Takeoff Time:</label>
-                <input type="datetime-local" id="takeOff" name="takeOff"><br><br>
-                <label for="landing">Landing Time:</label>  
-                <input type="datetime-local" id="landing" name="landing"><br><br>
-                <button type="submit" @click.prevent="submitFlight">Submit</button>
-                <button type="update" @click.prevent="updateFlight">Update</button>
-                <button type="delete" @click.prevent="deleteFlight">Delete</button>
-            </form>
-            <form>
-                <label for="search">Search By ID:</label>
-                <input type="number" id="searchID"><br><br>
-                <button type="submit" @click.prevent="searchFlight">Search</button>
-            </form>
+        <div class="user-container">
+            <div label="user-input">
+                <form>
+                    <label for="tailNumber">Tail Number:</label>
+                    <input type="text" id="tailNumber" name="tailNumber"><br>
+                    <label for="flightID">Flight ID:</label>
+                    <input type="number" id="flightID" name="flightID"><br>
+                    <label for="takeOff">Takeoff Time:</label>
+                    <input type="datetime-local" id="takeOff" name="takeOff"><br>
+                    <label for="landing">Landing Time:</label>  
+                    <input type="datetime-local" id="landing" name="landing"><br>
+                    <div class="button-group">
+                        <button type="submit" @click.prevent="submitFlight">Submit</button>
+                        <button type="update" @click.prevent="updateFlight">Update</button>
+                        <button type="delete" @click.prevent="deleteFlight">Delete</button>
+                    </div>
+                </form>
+                <form>
+                    <label for="search">Search By ID:</label>
+                    <input type="number" id="searchID"><br>
+                    <div class="button-group">
+                        <button type="submit" @click.prevent="searchFlight">Search</button>
+                        <button class ="reset-button" @click="fetchFlights">Reset View</button>
+                    </div>                    
+                </form>
+            </div>
+        </div>
 
-        </div>
     </div>
 </template>
 
@@ -63,7 +69,7 @@ export default {
         return {
             flights: [], // Array of retrieved flights
             currentPage: 1,
-            pageSize: 10,
+            pageSize: 8,
             selectedFlight: null,
         };
     },
@@ -84,6 +90,17 @@ export default {
         this.fetchFlights();
     },
     methods: {
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
         async searchFlight(){
             const flightID = document.getElementById('searchID').value;
             const q = query(collection(db, "flights"), where("flightID", "==", flightID));
@@ -273,6 +290,20 @@ export default {
 
             console.log("flights: ", this.flights);
 
+            //This is to Make sure table size is the same in Display
+            const rowsPresent = this.flights.length % this.pageSize;
+
+            if (rowsPresent !== 0 || this.flights.length == 0)  {
+                const rowsToAdd = this.pageSize - rowsPresent;
+                
+                for (let i = 0; i < rowsToAdd; i++) {
+                    this.flights.push({});  
+                }
+                console.log("flights: ", this.flights);
+            }
+
+
+
         },
 
         handleRowClick(flight) {
@@ -293,8 +324,87 @@ export default {
 
 // "scoped" will Keep the style within this view.
 <style scoped>
+.user-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin:20px;
+    width: 95%;
+    margin-top: 15px;
+}
+
+.user-container > div {
+    flex: 1;
+}
+
+.reset-button {
+  background-color: rgb(226, 51, 51)!important;
+}
+
+.reset-button:hover {
+  background-color: #2980b9!important;
+}
+
+/* Style for the div with label="user-input" */
+div[label="user-input"] {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+div[label="user-input"] > form {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+div[label="user-input"] label {
+    display: inline-block;
+    width: 120px;
+    margin-bottom: 5px;
+}
+
+div[label="user-input"] input {
+    width: calc(100% - 125px);
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+div[label="user-input"] button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+div[label="user-input"] button:hover {
+    background-color: #45a049;
+}
+
+div[label="user-input"] button[type="update"] {
+    background-color: #2196F3;
+}
+
+div[label="user-input"] button[type="update"]:hover {
+    background-color: #0b7dda;
+}
+
+div[label="user-input"] button[type="delete"] {
+    background-color: #f44336;
+}
+
+div[label="user-input"] button[type="delete"]:hover {
+    background-color: #d32f2f;
+}
+
+
 .highlight {
-    background-color: hsl(37, 67%, 57%); /* Light blue background */
+    background-color: hsl(37, 67%, 57%); 
 }
 .flights-view {
     display: flex;
@@ -304,26 +414,64 @@ export default {
 
 .table-container {
     width: 100%;
+    max-height: 800px; 
+    min-height: 50vh;
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 15px; 
+
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #f2f2f2;
+    z-index: 1;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 0.85em; /* This will scale with the font size */
+    height: 1em; /* Base height equal to font size */
+    vertical-align: middle; /* Centers text vertically */
 }
 
 th {
     background-color: #f2f2f2;
 }
 
+tr {
+    height: 2.5em; /* Sets consistent row height relative to font size */
+}
+
 .pagination {
-    margin-top: 10px;
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Reduced spacing between elements */
+    margin: 15px 0;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 14px;
+    padding: 0 5px; /* Reduced padding around the text */
 }
 </style>
