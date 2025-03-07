@@ -25,16 +25,26 @@ import { useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import LoginPage from "./components/LoginPage.vue";
 
-const router = useRouter();
-const isAuthenticated = ref(false);
-const userData = ref(null);
+const router = useRouter(); //Vue default router
+const isAuthenticated = ref(false); //isAuthenticated checks if user is logged in. True: User is logged in
+const userData = ref(null); //userData will be filled with user's username when logged in.
 
 // Check for authentication when the component mounts
 onMounted(() => {
   checkAuthentication();
 });
 
-// Function to check if user is authenticated
+/*
+function checkAuthentication() 
+returns: None
+parameters: None
+
+Checks if the user has logged in by checking isAuthenticated value.
+User cannot access anything but login page when he is not authenticated.
+
+If user logged in, redirect him into the app.
+Else continue to stay in login page.
+*/
 const checkAuthentication = () => {
   const storedUser = localStorage.getItem('user');
   if (storedUser) {
@@ -53,14 +63,30 @@ const checkAuthentication = () => {
   }
 };
 
-// Handle successful login
+/*
+function handleLoginSuccess() 
+returns: None
+parameters: user user
+
+When the user logs in successfully:
+  userData records the username
+  isAuthenticated value is set to True.
+
+  the user is routed to the 'flights' page of the app.
+*/
 const handleLoginSuccess = (user) => {
   userData.value = user;
   isAuthenticated.value = true;
   router.push('/flights');
 };
 
-// Handle logout
+/*
+function handleLogout() 
+returns: None
+parameters: None
+
+When the user logs out, clear userData and set isAuthenticated to False.
+*/
 const handleLogout = () => {
   localStorage.removeItem('user');
   userData.value = null;
@@ -116,8 +142,8 @@ nav a {
 }
 
 nav a:hover {
-  color: #ff7f50;  /* Change color on hover (light orange, or choose another color) */
-  background-color: rgba(255, 127, 80, 0.2); /* Light orange background on hover */
+  color: #ff7f50;  /* Change color on hover*/
+  background-color: rgba(255, 127, 80, 0.2); 
 }
 
 nav a:first-of-type {
@@ -130,7 +156,7 @@ nav a:first-of-type {
 }
 
 .main-content {
-  padding-top: 70px; /* Adjust based on your nav height */
+  padding-top: 70px; 
 }
 
 </style>
