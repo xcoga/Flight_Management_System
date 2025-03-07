@@ -80,20 +80,27 @@ button:hover {
   
   <script setup>
   import { ref } from 'vue';
-  import { db, getDocs, collection, query, where } from '../firebase'; // Adjust path as needed
+  import { db, getDocs, collection, query, where } from '../firebase'; 
   
+  //Default emit
   const emit = defineEmits(['login-success']);
 
   // Define reactive variables. Vue automatically reflects these changes in DOM when these elements are updated. For e.g., when username in the DOM is updated, this variable is updated as well.
   const username = ref('');
   const password = ref('');
   
+  /*
+  function handleLogin()
+  returns: None
+  parameters: None
+  emits an event "login-success", which the App.vue is listening out for.
+  */
   const handleLogin = async () => {
     console.log('Entered username + password:', username.value, password.value);
     const userDocRef = collection(db, 'users');
   
     try {
-      // Construct and execute query
+      //Query to send to firebase
       const q = query(
         userDocRef, 
         where("username", "==", username.value), 
@@ -105,7 +112,7 @@ button:hover {
         const userData = querySnapshot.docs[0].data();
         console.log("User logging in:", userData.username);
         
-        // Store in localStorage
+        // Store in localStorage (browser cache/cookie)
         localStorage.setItem('user', JSON.stringify(userData.username));
         localStorage.setItem('isAdmin', JSON.stringify(userData.isAdmin));
         

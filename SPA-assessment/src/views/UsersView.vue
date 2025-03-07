@@ -45,18 +45,36 @@
 import { db, getDocs, collection, setDoc, addDoc, doc, getDoc, updateDoc, deleteDoc, query, where } from '../firebase';
 
 export default {
+    //In Vue, variables in data are reactive. When they are updated, the corresponding elements in DOM are updated.
     data() {
         return {
-            users: [],
-            selectedUser: null,
-            currentPage: 1,
+            users: [], //Retrieved users from firebase
+            selectedUser: null, //Selected user from the table in <div class="user-input">
+            currentPage: 1, //Default page of the table when the app is loaded.
             pageSize: 5, // Number of users per page
         };
     },
+
+    //Vue computed properties are used to define a property that is dependent on other properties.
+    //These properties are updated when the dependent properties are updated.
     computed: {
+        /*
+        function totalPages()
+        returns: int no_of_pages
+        parameters: None
+        
+        calculates number of pages needed to display all the flights in the table.
+        */
         totalPages() {
             return Math.ceil(this.users.length / this.pageSize);
         },
+        /*
+        function paginatedFlights()
+        returns: array{} flights
+        parameters: None
+        
+        returns the flights for the current page
+        */   
         paginatedUsers() {
             const start = (this.currentPage - 1) * this.pageSize;
             const end = start + this.pageSize;
@@ -64,22 +82,41 @@ export default {
         },
     },
     created() {
-        this.fetchUsers();
+        this.fetchUsers(); //Get all users from firebase
     },
     methods: {
+        /*
+        function nextPage()
+        returns: None
+        parameters: None
+
+        Flips the table to the next page.
+        */
         nextPage() {
             if (this.currentPage < this.totalPages) {
                 this.currentPage++;
-                // console.log("isAdmin val: ", this.isAdmin);
             }
         },
-        
+
+        /*
+        function prevPage()
+        returns: None
+        parameters: None
+
+        Flips the table to the prev page.
+        */   
         prevPage() {
             if (this.currentPage > 1) {
                 this.currentPage--;
             }
         },
-        
+        /*
+        function handleRowClick()
+        returns: None
+        parameters: User user
+
+        When a row in the table is clicked, the user details fill up the form in <div class="user-input">.
+        */       
         handleRowClick(user){
             this.selectedUser = user;
 
@@ -87,7 +124,15 @@ export default {
             document.getElementById('password').value = user.password;
             document.getElementById('isAdmin').checked = user.isAdmin;
         },
+        /*
+        function submitUser()
+        returns: None
+        parameters: None
 
+        Gets the filled in user-details from <div class="user-input">, then added to firebase.
+        All fields must be filled.
+        Once user is added, refresh the table with new set of users.
+        */
         async submitUser(){
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -113,6 +158,16 @@ export default {
             this.fetchUsers();
         },
 
+        /*
+        function updateUser()
+        returns: None
+        parameters: None
+
+        Gets documentID & the filled in user-details from <div class="user-input">.
+        Updates the documentID in firebase with the user-details
+        All fields must be filled.
+        Once user is updated, refresh the table with new set of users.
+        */
         async updateUser(){
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -134,6 +189,15 @@ export default {
             this.fetchUsers();
         },
 
+        /*
+        function deleteUser()
+        returns: None
+        parameters: None
+
+        Gets documentID & the filled in user-details from <div class="user-input">.
+        Deletes the documentID in firebase.
+        Once user is deleted, refresh the table with new set of users.
+        */
         async deleteUser(){
             const username = document.getElementById('username').value;
 
@@ -152,6 +216,13 @@ export default {
             this.fetchUsers();
         },
 
+        /*
+        function fetchUsers() 
+        returns: None
+        parameters: None
+
+        Fetch all the users from firebase
+        */
         async fetchUsers() {
             const usersDocRef = collection(db, 'users');
             this.users = [];
@@ -172,7 +243,14 @@ export default {
                 console.error("Error getting users:", error);
             }
         },
-        
+
+        /*
+        function ensureTableSize() 
+        returns: None
+        parameters: None
+
+        If the data is not enough to fill the whole table page, pad the table with empty values.
+        */        
         ensureTableSize() {
             // Calculate how many empty rows we need to add
             const currentRowCount = this.users.length;
@@ -186,13 +264,15 @@ export default {
                         id: `placeholder-${i}`,
                         username: '',
                         password: '',
-                        isAdmin: false
+                        isAdmin: '',
                     });
                 }
             }
         }
     }
 };
+
+
 </script>
 <style scoped>
 .input-text{
