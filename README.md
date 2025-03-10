@@ -3,6 +3,7 @@
 ## Website
 
 [Flight Management System](https://flight-management-3f213.web.app)
+NOTE: In the firebase.js, insert API key to get the app to work. (Also, create 2 collections named 'flights' and 'users')
 
 ## Features
 
